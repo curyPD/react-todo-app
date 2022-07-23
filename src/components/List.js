@@ -3,7 +3,15 @@ import { IoCheckmarkSharp, IoTrashSharp } from "react-icons/io5";
 import { CSSTransition } from "react-transition-group";
 
 export default function List(props) {
-    const listItems = props.todos.map((todo) => {
+    let todos;
+
+    if (props.curOption === "all") todos = props.todos;
+    if (props.curOption === "completed")
+        todos = props.todos.filter((todo) => todo.complete);
+    if (props.curOption === "unfinished")
+        todos = props.todos.filter((todo) => !todo.complete);
+
+    const listItems = todos.map((todo) => {
         return (
             <ListItem
                 key={todo.id}
@@ -12,6 +20,7 @@ export default function List(props) {
                 complete={todo.complete}
                 exists={todo.exists}
                 completeTodo={props.completeTodo}
+                hideTodo={props.hideTodo}
                 deleteTodo={props.deleteTodo}
             />
         );
@@ -25,9 +34,10 @@ function ListItem(props) {
         <CSSTransition
             in={props.exists}
             timeout={300}
-            unmountOnExit
+            unmountOnExit={true}
             classNames="example"
             appear={true}
+            onExited={() => props.deleteTodo(props.id)}
         >
             <li
                 className={[props.complete ? "todo-complete" : "", "todo"].join(
@@ -38,7 +48,7 @@ function ListItem(props) {
                 <button onClick={() => props.completeTodo(props.id)}>
                     <IoCheckmarkSharp />
                 </button>
-                <button onClick={() => props.deleteTodo(props.id)}>
+                <button onClick={() => props.hideTodo(props.id)}>
                     <IoTrashSharp />
                 </button>
             </li>

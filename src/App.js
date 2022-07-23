@@ -12,8 +12,6 @@ export default function () {
         curOption: "all",
     });
 
-    const [state, setState] = useState(false);
-
     useEffect(() => {
         localStorage.setItem("todos", JSON.stringify(todos));
     }, [todos]);
@@ -51,12 +49,16 @@ export default function () {
         );
     };
 
-    const deleteTodo = function (id) {
+    const hideTodo = function (id) {
         setTodos((prevTodos) =>
             prevTodos.map((todo) =>
                 todo.id === id ? { ...todo, exists: !todo.exists } : todo
             )
         );
+    };
+
+    const deleteTodo = function (id) {
+        setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
     };
 
     return (
@@ -70,8 +72,10 @@ export default function () {
             />
             <List
                 todos={todos}
-                deleteTodo={deleteTodo}
+                hideTodo={hideTodo}
                 completeTodo={completeTodo}
+                deleteTodo={deleteTodo}
+                curOption={formData.curOption}
             />
         </>
     );

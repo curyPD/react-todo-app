@@ -96,7 +96,7 @@ input::placeholder {
 }
 
 select {
-    width: 12.8rem;
+    width: 14rem;
     margin-left: auto;
     background-color: #fff;
     color: hsla(33, 100%, 53%, 1);
